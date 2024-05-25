@@ -1,4 +1,4 @@
-This project is a straightforward demonstration that utilizes [Vercel AI SDK v3.0](https://github.com/vercel/ai) to implement Generative UI.
+This project utilizes [Vercel AI SDK v3.0](https://github.com/vercel/ai) to implement Generative UI.
 It's developed based on the sample code provided in the [official documentation](https://sdk.vercel.ai/docs/concepts/ai-rsc).
 
 ## Getting Started
@@ -6,13 +6,13 @@ It's developed based on the sample code provided in the [official documentation]
 1. Clone the repository
 
 ```bash
-git clone https://github.com/miurla/gen-ui-demo
+git clone https://github.com/arjunkmrm/babelfish
 ```
 
 2. Go to the project folder
 
 ```bash
-cd gen-ui-demo
+cd babelfish
 ```
 
 3. Install packages
