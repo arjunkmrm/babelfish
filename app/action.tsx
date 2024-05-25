@@ -16,6 +16,7 @@ import CardsManagementCard from "@/components/card-managemnent-card";
 import ChatComponent from "@/components/ChatComponent"
 
 const openai = new OpenAI();
+const chatHistory = [];
 
 async function submitMessage(content: string) {
   "use server";
@@ -32,24 +33,38 @@ async function submitMessage(content: string) {
     },
   ]);
 
+  // const additionalMessages = [
+  //   { role: "user", content: "i want to travel to japan" },
+  //   { role: "assistant", content: "oh great! Let's get you prepared" }
+  // ];
+
+  chatHistory.push({
+    role:"user",
+    content: content,
+  })
+
   const ui = render({
     provider: openai,
     model: "gpt-4o",
     messages: [
       { role: "system", content: "You are a helpful assistant" },
-      { role: "user", content },
+      ...chatHistory, 
     ],
     // `text` is called when an AI returns a text response (as opposed to a tool call)
     text: ({ content, done }) => {
       // text can be streamed from the LLM, but we only want to close the stream with .done() when its completed.
       // done() marks the state as available for the client to access
       if (done) {
+        const assistantMessage = {
+          role: "assistant",
+          content,
+        }
+
+        chatHistory.push(assistantMessage);
+        
         aiState.done([
           ...aiState.get(),
-          {
-            role: "assistant",
-            content,
-          },
+          assistantMessage,
         ]);
       }
       return <BotMessage>{content}</BotMessage>;
