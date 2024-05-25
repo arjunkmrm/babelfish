@@ -10,6 +10,7 @@ import RegisterPayNow from "@/components/register-paynow-card";
 import PastTransactionsCard from "@/components/transactions-card";
 import PaymentCard from "@/components/people-payment-card";
 import InsurancePlansCard from "@/components/insurance-card";
+import InvestmentCard from "@/components/manage-investment";
 
 const openai = new OpenAI();
 
@@ -288,6 +289,41 @@ async function submitMessage(content: string) {
           );
         },
       },
+      // end
+      // view investments
+      view_investments: {
+        description: "shows a UI of investment options",
+        parameters: z
+          .object({
+            type: z
+              .enum(["all", "bonds", "stocks", "mixed"])
+              .describe("The type of investment product"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+
+          const { type } = JSON.parse(args as unknown as string) || {};
+
+          const investmentsResult = await getInvestments(type);
+
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "view_investments_result",
+              content: JSON.stringify(investmentsResult),
+            },
+          ]);
+
+          return (
+            <BotMessage>
+              <InvestmentCard investments={investmentsResult} />
+            </BotMessage>
+          );
+        },
+      },
+      // end
     },
   });
 
@@ -463,6 +499,58 @@ async function getInsurancePlans(type: string): Promise<any> {
     otherPlans,
   };
 }
+
+// Dummy function for getInvestments
+async function getInvestments(type: string): Promise<any> {
+  // This is a mock function. Replace it with your actual logic for fetching investments.
+  console.log("Fetching investments");
+
+  // Simulate a delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Return a mock result
+  const allInvestments = [
+    {
+      id: 1,
+      name: "Apple Inc.",
+      type: "stocks",
+      amount: 5000.0,
+    },
+    {
+      id: 2,
+      name: "Government Bond",
+      type: "bonds",
+      amount: 10000.0,
+    },
+    {
+      id: 3,
+      name: "Growth Fund",
+      type: "mutual-funds",
+      amount: 8000.0,
+    },
+    {
+      id: 4,
+      name: "Amazon.com Inc.",
+      type: "stocks",
+      amount: 4000.0,
+    },
+    {
+      id: 5,
+      name: "Corporate Bond",
+      type: "bonds",
+      amount: 6000.0,
+    },
+    {
+      id: 6,
+      name: "Emerging Markets Fund",
+      type: "mutual-funds",
+      amount: 7000.0,
+    },
+  ];
+
+  return allInvestments;
+}
+
 
 const initialAIState: {
   role: "user" | "assistant" | "system" | "function";

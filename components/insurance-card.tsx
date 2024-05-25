@@ -33,11 +33,11 @@ export default function InsurancePlansCard({ currentPlans, otherPlans }: Insuran
   const [showMorePopup, setShowMorePopup] = useState<boolean>(false);
   const [showBuyPopup, setShowBuyPopup] = useState<boolean>(false);
 
-  const handleTypeChange = (value) => {
+  const handleTypeChange = (value: string) => {
     setSelectedType(value);
   };
 
-  const handlePlanSelect = (plan) => {
+  const handlePlanSelect = (plan: InsuranceProduct) => {
     setSelectedPlan(plan);
   };
 
@@ -63,8 +63,8 @@ export default function InsurancePlansCard({ currentPlans, otherPlans }: Insuran
   const filteredCurrentPlans = currentPlans.filter((plan) => selectedType === 'all' || plan.type === selectedType);
   const filteredOtherPlans = otherPlans.filter((plan) => selectedType === 'all' || plan.type === selectedType);
 
-  const isCurrentPlanSelected = selectedPlan && currentPlans.some(plan => plan.id === selectedPlan.id);
-  const isOtherPlanSelected = selectedPlan && otherPlans.some(plan => plan.id === selectedPlan.id);
+  const isCurrentPlanSelected = selectedPlan !== null && currentPlans.some(plan => plan.id === selectedPlan.id);
+  const isOtherPlanSelected = selectedPlan !== null && otherPlans.some(plan => plan.id === selectedPlan.id);
 
   return (
     <Card className="w-96 relative">
@@ -142,15 +142,6 @@ export default function InsurancePlansCard({ currentPlans, otherPlans }: Insuran
         <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4 rounded-lg shadow-lg">
           <p className="text-lg">Insurance plan purchased</p>
           <div className="mt-auto self-end">
-            <Button onClick={handleClosePopup}>Close</Button>
-          </div>
-        </div>
-      )}
-
-      {showBuyPopup && (
-        <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4 rounded-lg shadow-lg">
-          <p className="text-lg">Insurance plan purchased</p>
-          <div className="mt-4">
             <Button onClick={handleClosePopup}>Close</Button>
           </div>
         </div>
