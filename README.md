@@ -37,8 +37,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Learn More
 
-To learn more about Generative UI, take a look at the following resources:
+More links:
 
-- [Read the blog post](https://vercel.com/blog/ai-sdk-3-generative-ui)
-- [Visit the docs](https://sdk.vercel.ai/docs/concepts/ai-rsc)
-- [Generative UI Demo](https://github.com/vercel/ai/tree/main/examples/next-ai-rsc)
+- [Generative UI Demo]
