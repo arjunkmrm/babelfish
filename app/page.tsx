@@ -5,6 +5,7 @@ import { useUIState, useActions } from "ai/rsc";
 import { type AI } from "./action";
 import { UserMessage } from "@/components/message";
 import { Button } from "@/components/ui/button"; // Assuming you have the ShadCN button component
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog"; // Assuming you have the ShadCN dialog component
 import { Mic } from "lucide-react"; // Assuming you have the Lucide icon library
 import dotenv from 'dotenv';
 dotenv.config();
@@ -16,6 +17,7 @@ export default function Page() {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const addAudioElement = async (blob: Blob) => {
     console.log("addAudioElement function called");
@@ -53,6 +55,7 @@ export default function Page() {
 
     } catch (error) {
       console.error("Error in addAudioElement:", error);
+      setIsDialogOpen(true); // Open dialog when there's an error
     }
   };
 
@@ -86,6 +89,7 @@ export default function Page() {
       };
     } catch (err) {
       console.error("Error accessing media devices.", err);
+      setIsDialogOpen(true); // Open dialog when there's an error
     }
   };
 
@@ -146,6 +150,22 @@ export default function Page() {
           </Button>
         </div>
       </form>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Server Connection Error</DialogTitle>
+            <DialogDescription>
+              There was an error connecting to the server. Please try again later.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

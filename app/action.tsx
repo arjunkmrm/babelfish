@@ -12,6 +12,7 @@ import PaymentCard from "@/components/people-payment-card";
 import InsurancePlansCard from "@/components/insurance-card";
 import InvestmentCard from "@/components/manage-investment";
 import LoansCard from "@/components/apply-loan-card";
+import ChatComponent from "@/components/ChatComponent"
 
 const openai = new OpenAI();
 
@@ -31,7 +32,7 @@ async function submitMessage(content: string) {
 
   const ui = render({
     provider: openai,
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o",
     messages: [
       { role: "system", content: "You are a helpful assistant" },
       { role: "user", content },
@@ -674,3 +675,4 @@ export const AI = createAI({
   initialUIState,
   initialAIState,
 });
+

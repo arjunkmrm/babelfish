@@ -1,0 +1,206 @@
+{
+  "userProfile": {
+    "transactions": [
+      {
+        "id": 1,
+        "name": "Grocery Store",
+        "date": "2024-05-23",
+        "time": "14:00",
+        "amount": 120.5
+      },
+      {
+        "id": 2,
+        "name": "Electricity Bill",
+        "date": "2024-05-20",
+        "time": "10:30",
+        "amount": 250
+      },
+      {
+        "id": 3,
+        "name": "Pharmacy",
+        "date": "2024-05-18",
+        "time": "16:45",
+        "amount": 75.3
+      },
+      {
+        "id": 4,
+        "name": "Monthly Rent",
+        "date": "2024-05-01",
+        "time": "09:00",
+        "amount": 900
+      },
+      {
+        "id": 5,
+        "name": "Phone Bill",
+        "date": "2024-05-15",
+        "time": "12:00",
+        "amount": 60
+      },
+      {
+        "id": 6,
+        "name": "Restaurant",
+        "date": "2024-05-10",
+        "time": "20:00",
+        "amount": 150.75
+      },
+      {
+        "id": 7,
+        "name": "Water Bill",
+        "date": "2024-05-08",
+        "time": "11:00",
+        "amount": 200
+      },
+      {
+        "id": 8,
+        "name": "Clothing Store",
+        "date": "2024-05-05",
+        "time": "13:00",
+        "amount": 80
+      },
+      {
+        "id": 9,
+        "name": "Online Subscription",
+        "date": "2024-05-03",
+        "time": "19:00",
+        "amount": 50
+      },
+      {
+        "id": 10,
+        "name": "Unknown Number",
+        "date": "2024-04-30",
+        "time": "21:00",
+        "amount": 3000,
+        "isScam": true
+      }
+    ],
+    "accountDetails": {
+      "fixedDeposit": {
+        "amount": 12000,
+        "currency": "SGD"
+      },
+      "savingsAccount": {
+        "amount": 35038,
+        "currency": "SGD"
+      },
+      "multiplierAccount": {
+        "amount": 9750.5,
+        "currency": "USD",
+        "currencyAccount": {
+          "SGD": 3000,
+          "USD": 5000,
+          "JPY": 0
+        }
+      }
+    },
+    "payments": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "group": "friends",
+        "avatar": "path/to/avatar1.png"
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "group": "friends",
+        "avatar": "path/to/avatar2.png"
+      },
+      {
+        "id": 3,
+        "name": "Charlie",
+        "group": "family",
+        "avatar": "path/to/avatar3.png"
+      },
+      {
+        "id": 4,
+        "name": "David",
+        "group": "flatmate",
+        "avatar": "path/to/avatar4.png"
+      },
+      {
+        "id": 5,
+        "name": "Eva Salon",
+        "group": "others",
+        "avatar": "path/to/avatar5.png"
+      },
+      {
+        "id": 6,
+        "name": "Frank",
+        "group": "family",
+        "avatar": "path/to/avatar6.png"
+      },
+      {
+        "id": 7,
+        "name": "Grace",
+        "group": "family",
+        "avatar": "path/to/avatar7.png"
+      },
+      {
+        "id": 8,
+        "name": "Hannah Niece",
+        "group": "family",
+        "avatar": "path/to/avatar8.png"
+      }
+    ],
+    "bills": [
+      {
+        "id": 1,
+        "organization": "Electricity Company",
+        "amount": 250,
+        "dueDate": "2024-06-01",
+        "logo": "path/to/logo1.png",
+        "paid": false
+      },
+      {
+        "id": 2,
+        "organization": "Water Company",
+        "amount": 200,
+        "dueDate": "2024-06-05",
+        "logo": "path/to/logo2.png",
+        "paid": false
+      },
+      {
+        "id": 3,
+        "organization": "Phone Company",
+        "amount": 60,
+        "dueDate": "2024-06-10",
+        "logo": "path/to/logo3.png",
+        "paid": false
+      }
+    ],
+    "insurance": {
+      "travelInsurance": "No",
+      "healthInsurance": {
+        "active": "Yes",
+        "validity": "2025-12-31"
+      },
+      "lifeInsurance": {
+        "active": "Yes",
+        "validity": "2030-05-15"
+      },
+      "vehicleInsurance": "No",
+      "homeInsurance": "No"
+    },
+    "payNow": "Yes",
+    "digiPortfolio": [
+      {
+        "name": "Global Portfolio",
+        "type": "Equity",
+        "riskLevel": "High",
+        "amount": 0
+      },
+      {
+        "name": "Asia Portfolio",
+        "type": "Bond",
+        "riskLevel": "Medium",
+        "amount": 0
+      },
+      {
+        "name": "Income Portfolio",
+        "type": "Income",
+        "riskLevel": "Low",
+        "amount": 0
+      }
+    ]
+  }
+}
