@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import { z } from "zod";
 import { Spinner } from "@/components/spinner";
 import { BotMessage } from "@/components/message";
-import WeatherCard from "@/components/weather-card";
+// import WeatherCard from "@/components/weather-card";
 import BillPaymentCard from "@/components/bill-payment-card";
 import CurrencyConverter from "@/components/currency-card";
 import RegisterPayNow from "@/components/register-paynow-card";
@@ -12,12 +12,14 @@ import PaymentCard from "@/components/people-payment-card";
 import InsurancePlansCard from "@/components/insurance-card";
 import InvestmentCard from "@/components/manage-investment";
 import LoansCard from "@/components/apply-loan-card";
+import CardsManagementCard from "@/components/card-managemnent-card";
 import ChatComponent from "@/components/ChatComponent"
 
 const openai = new OpenAI();
 
 async function submitMessage(content: string) {
   "use server";
+  
 
   const aiState = getMutableAIState<typeof AI>();
 
@@ -53,43 +55,43 @@ async function submitMessage(content: string) {
       return <BotMessage>{content}</BotMessage>;
     },
     tools: {
-      // get weather
-      get_city_weather: {
-        description: "Get the current weather for a city",
-        parameters: z
-          .object({
-            city: z
-              .string()
-              .describe("The city and state, e.g. San Francisco, CA"),
-          })
-          .required(),
-        render: async function* (args) {
-          yield <Spinner />;
+      // // get weather
+      // get_city_weather: {
+      //   description: "Get the current weather for a city",
+      //   parameters: z
+      //     .object({
+      //       city: z
+      //         .string()
+      //         .describe("The city and state, e.g. San Francisco, CA"),
+      //     })
+      //     .required(),
+      //   render: async function* (args) {
+      //     yield <Spinner />;
 
-          // Workaround for a bug in the current version (v3.0.1)
-          // issue: https://github.com/vercel/ai/issues/1026
-          const { city } = JSON.parse(args as unknown as string);
-          console.log(city); // This is the correct
+      //     // Workaround for a bug in the current version (v3.0.1)
+      //     // issue: https://github.com/vercel/ai/issues/1026
+      //     const { city } = JSON.parse(args as unknown as string);
+      //     console.log(city); // This is the correct
 
-          const weather = await getWeather(city);
+      //     const weather = await getWeather(city);
 
-          aiState.done([
-            ...aiState.get(),
-            {
-              role: "function",
-              name: "get_weather_info",
-              // Content can be any string to provide context to the LLM in the rest of the conversation
-              content: JSON.stringify(weather),
-            },
-          ]);
+      //     aiState.done([
+      //       ...aiState.get(),
+      //       {
+      //         role: "function",
+      //         name: "get_weather_info",
+      //         // Content can be any string to provide context to the LLM in the rest of the conversation
+      //         content: JSON.stringify(weather),
+      //       },
+      //     ]);
 
-          return (
-            <BotMessage>
-              <WeatherCard info={weather} />
-            </BotMessage>
-          );
-        },
-      },
+      //     return (
+      //       <BotMessage>
+      //         <WeatherCard info={weather} />
+      //       </BotMessage>
+      //     );
+      //   },
+      // },
       // pay bills
       pay_bill: {
         description: "Returns the list of bills to pay",
@@ -363,6 +365,47 @@ async function submitMessage(content: string) {
         },
       },
       // end
+      // manage cards
+      manage_cards: {
+        description: "shows a UI for managing credit cards",
+        parameters: z
+          .object({
+            type: z
+              .enum(["all", "multicurrency", "live fresh"])
+              .describe("The type of card"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+          
+          const { cardName } = JSON.parse(args as unknown as string) || {};
+          
+          const cardsResult = await getCreditCards();
+          
+          let selectedCard = null;
+          if (cardName) {
+            selectedCard = cardsResult.find((card) => card.name === cardName);
+          }
+          
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "manage_cards_result",
+              content: JSON.stringify(cardsResult),
+            }
+          ]);
+          
+          return (
+            <BotMessage>
+              <CardsManagementCard cards={cardsResult} />
+            </BotMessage>
+          );
+        },
+      },
+
+// end
+
     },
   });
 
@@ -651,6 +694,49 @@ async function getLoans(type: string): Promise<any> {
   } else {
     return allLoans.filter((loan) => loan.type === type);
   }
+}
+
+// Dummy function for getCreditCards
+
+async function getCreditCards(): Promise<any[]> {
+  // This is a mock function. Replace it with your actual logic for fetching credit cards.
+  console.log("Fetching credit cards");
+
+  // Simulate a delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Return a mock result
+  const creditCards = [
+    {
+      id: 1,
+      name: "live fresh",
+      image: "/live_fresh.webp",
+      active: true,
+      overseasActive: false,
+      spendingLimit: 5000.0,
+      currentSpending: 2500.0,
+    },
+    {
+      id: 2,
+      name: "multicurrency",
+      image: "/multicurrency.webp",
+      active: true,
+      overseasActive: true,
+      spendingLimit: 10000.0,
+      currentSpending: 7500.0,
+    },
+    {
+      id: 3,
+      name: "insignia",
+      image: "/insignia.webp",
+      active: false,
+      overseasActive: false,
+      spendingLimit: 8000.0,
+      currentSpending: 1200.0,
+    },
+  ];
+
+  return creditCards;
 }
 
 

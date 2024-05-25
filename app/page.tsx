@@ -133,7 +133,7 @@ export default function Page() {
       >
         <div className="flex items-center">
           <input
-            placeholder="Send a message... (e.g. What is the weather in SF?)"
+            placeholder="Send a message... (e.g. I want to convert my currency)"
             value={inputValue}
             onChange={(event) => {
               setInputValue(event.target.value);
