@@ -9,6 +9,7 @@ import CurrencyConverter from "@/components/currency-card";
 import RegisterPayNow from "@/components/register-paynow-card";
 import PastTransactionsCard from "@/components/transactions-card";
 import PaymentCard from "@/components/people-payment-card";
+import InsurancePlansCard from "@/components/insurance-card";
 
 const openai = new OpenAI();
 
@@ -254,6 +255,39 @@ async function submitMessage(content: string) {
           );
         },
       },
+      // view insurance plans
+      view_insurance_plans: {
+        description: "Returns a UI with list of insurance plans available",
+        parameters: z
+          .object({
+            type: z
+              .enum(["all", "travel", "life", "health"])
+              .describe("The type of insurance plan to filter by"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+
+          const { type } = JSON.parse(args as unknown as string);
+
+          const plansResult = await getInsurancePlans(type);
+
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "view_insurance_plans_result",
+              content: JSON.stringify(plansResult),
+            },
+          ]);
+
+          return (
+            <BotMessage>
+              <InsurancePlansCard currentPlans={plansResult.currentPlans} otherPlans={plansResult.otherPlans} />
+            </BotMessage>
+          );
+        },
+      },
     },
   });
 
@@ -373,6 +407,61 @@ async function getTransactions(dateRange: { start: Date; end: Date }): Promise<a
       amount: 60.0,
     },
   ];
+}
+
+// Dummy function for getInsurancePlans
+async function getInsurancePlans(type: string): Promise<any> {
+  // This is a mock function. Replace it with your actual logic for fetching insurance plans.
+  console.log(`Fetching insurance plans of type: ${type}`);
+
+  // Simulate a delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Return a mock result
+  const allPlans = [
+    {
+      id: 1,
+      name: "Travel Protect",
+      type: "travel",
+      amount: 120.0,
+    },
+    {
+      id: 2,
+      name: "Life Secure",
+      type: "life",
+      amount: 250.0,
+    },
+    {
+      id: 3,
+      name: "Health Guard",
+      type: "health",
+      amount: 150.0,
+    },
+    {
+      id: 4,
+      name: "Global Travel",
+      type: "travel",
+      amount: 200.0,
+    },
+    {
+      id: 5,
+      name: "Family Life",
+      type: "life",
+      amount: 300.0,
+    },
+  ];
+
+  // Filter plans by type if necessary
+  const filteredPlans = type === 'all' ? allPlans : allPlans.filter(plan => plan.type === type);
+
+  // Mock current plans and other plans
+  const currentPlans = filteredPlans.slice(0, 2);
+  const otherPlans = filteredPlans.slice(2);
+
+  return {
+    currentPlans,
+    otherPlans,
+  };
 }
 
 const initialAIState: {

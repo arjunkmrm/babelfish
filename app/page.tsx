@@ -12,7 +12,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
-      <div className="flex flex-col space-y-4 w-full max-w-2xl">
+      <div className="flex flex-col space-y-4 w-full max-w-2xl mb-16">
         {
           // View messages in UI state
           messages.map((message) => (
