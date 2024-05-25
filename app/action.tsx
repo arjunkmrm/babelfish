@@ -11,6 +11,7 @@ import PastTransactionsCard from "@/components/transactions-card";
 import PaymentCard from "@/components/people-payment-card";
 import InsurancePlansCard from "@/components/insurance-card";
 import InvestmentCard from "@/components/manage-investment";
+import LoansCard from "@/components/apply-loan-card";
 
 const openai = new OpenAI();
 
@@ -324,6 +325,43 @@ async function submitMessage(content: string) {
         },
       },
       // end
+      // view loans
+
+      view_loans: {
+        description: "shows a UI of loan options",
+
+        parameters: z
+          .object({
+            type: z
+              .enum(["all", "personal", "business", "student"])
+              .describe("The type of loan product"),
+          })
+          .required(),
+
+        render: async function* (args) {
+          yield <Spinner />;
+
+          const { type } = JSON.parse(args as unknown as string) || {};
+
+          const loansResult = await getLoans(type);
+
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "view_loans_result",
+              content: JSON.stringify(loansResult),
+            },
+          ]);
+
+          return (
+            <BotMessage>
+              <LoansCard loans={loansResult} />
+            </BotMessage>
+          );
+        },
+      },
+      // end
     },
   });
 
@@ -549,6 +587,69 @@ async function getInvestments(type: string): Promise<any> {
   ];
 
   return allInvestments;
+}
+
+// Dummy function for getLoans
+
+async function getLoans(type: string): Promise<any> {
+  // This is a mock function. Replace it with your actual logic for fetching loans.
+
+  console.log("Fetching loans");
+
+  // Simulate a delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Return a mock result
+  const allLoans = [
+    {
+      id: 1,
+      name: "Personal Loan",
+      type: "personal",
+      duration: 36,
+      interestRate: 12.5,
+    },
+    {
+      id: 2,
+      name: "Business Loan",
+      type: "business",
+      duration: 60,
+      interestRate: 10.0,
+    },
+    {
+      id: 3,
+      name: "Student Loan",
+      type: "student",
+      duration: 120,
+      interestRate: 8.5,
+    },
+    {
+      id: 4,
+      name: "Home Improvement Loan",
+      type: "personal",
+      duration: 48,
+      interestRate: 11.0,
+    },
+    {
+      id: 5,
+      name: "Equipment Financing",
+      type: "business",
+      duration: 24,
+      interestRate: 9.5,
+    },
+    {
+      id: 6,
+      name: "Graduate Loan",
+      type: "student",
+      duration: 180,
+      interestRate: 7.0,
+    },
+  ];
+
+  if (type === "all") {
+    return allLoans;
+  } else {
+    return allLoans.filter((loan) => loan.type === type);
+  }
 }
 
 
