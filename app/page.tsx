@@ -11,14 +11,15 @@ export default function Page() {
   const { submitMessage } = useActions();
 
   return (
-    <div className="flex flex-col space-y-4">
-      {
-        // View messages in UI state
-        messages.map((message) => (
-          <div key={message.id}>{message.display}</div>
-        ))
-      }
-
+    <div className="flex flex-col items-center min-h-screen p-4">
+      <div className="flex flex-col space-y-4 w-full max-w-2xl">
+        {
+          // View messages in UI state
+          messages.map((message) => (
+            <div key={message.id}>{message.display}</div>
+          ))
+        }
+      </div>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -43,15 +44,18 @@ export default function Page() {
 
           setInputValue("");
         }}
+        className="fixed bottom-0 w-full max-w-2xl p-4 bg-white"
       >
-        <input
-          placeholder="Send a message... (e.g. What is the weather in SF?)"
-          value={inputValue}
-          onChange={(event) => {
-            setInputValue(event.target.value);
-          }}
-          className="border border-border rounded-md p-2 w-1/3 focus:outline-none"
-        />
+        <div className="flex">
+          <input
+            placeholder="Send a message... (e.g. What is the weather in SF?)"
+            value={inputValue}
+            onChange={(event) => {
+              setInputValue(event.target.value);
+            }}
+            className="border border-border rounded-md p-2 w-full focus:outline-none"
+          />
+        </div>
       </form>
     </div>
   );
