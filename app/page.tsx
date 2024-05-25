@@ -100,7 +100,24 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-4">
+    <div className="flex flex-col items-center min-h-screen p-4 relative">
+      {messages.length === 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '2.5rem',
+            fontFamily: 'Georgia, serif',
+            color: 'rgba(74, 85, 104, 0.5)', // Lighter shade and reduced opacity
+          }}
+        >
+        Good Morning, Bidyut
+          </div>
+
+      )}
       <div className="flex flex-col space-y-4 w-full max-w-2xl mb-16">
         {
           // View messages in UI state
