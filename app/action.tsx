@@ -8,6 +8,7 @@ import BillPaymentCard from "@/components/bill-payment-card";
 import CurrencyConverter from "@/components/currency-card";
 import RegisterPayNow from "@/components/register-paynow-card";
 import PastTransactionsCard from "@/components/transactions-card";
+import PaymentCard from "@/components/people-payment-card";
 
 const openai = new OpenAI();
 
@@ -219,6 +220,40 @@ async function submitMessage(content: string) {
           );
         },
       },
+      // end
+      // initiate payment for people
+      initiate_pay_people: {
+        description: "Displays UI for paying people",
+        parameters: z
+          .object({
+            date: z
+              .string()
+              .describe("person to pay to"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+
+          const { date, group } = JSON.parse(args as unknown as string);
+
+          const paymentResult = await initiatePayPeople(date, group);
+
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "initiate_pay_people_result",
+              content: JSON.stringify(paymentResult),
+            },
+          ]);
+
+          return (
+            <BotMessage>
+              <PaymentCard payments={paymentResult} />
+            </BotMessage>
+          );
+        },
+      },
     },
   });
 
@@ -271,6 +306,37 @@ async function payBill(date: Date): Promise<any> {
       organization: "ABC Company",
       dueDate: "2023-06-30",
       amount: 200.0,
+    },
+  ];
+}
+
+// Dummy function for initiatePayPeople
+async function initiatePayPeople(date: Date, group: string): Promise<any> {
+  // This is a mock function. Replace it with your actual payment initiation logic.
+  console.log(`Initiating payments for ${group} on ${date}`);
+
+  // Simulate a delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Return a mock payment result
+  return [
+    {
+      id: 1,
+      name: "John Doe",
+      group: "friends",
+      avatar: "https://via.placeholder.com/150",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      group: "family",
+      avatar: "https://via.placeholder.com/150",
+    },
+    {
+      id: 3,
+      name: "Emily Johnson",
+      group: "flatmates",
+      avatar: "https://via.placeholder.com/150",
     },
   ];
 }
