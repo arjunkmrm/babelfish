@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "babelfish",
-  description: "demo of babelfish",
+  description: "generative ui for banking",
 };
 
 export default function RootLayout({
