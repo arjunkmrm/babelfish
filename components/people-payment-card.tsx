@@ -66,6 +66,7 @@ export default function PaymentCard({ payments }: PaymentProps) {
               <SelectItem value="friends">Friends</SelectItem>
               <SelectItem value="family">Family</SelectItem>
               <SelectItem value="flatmates">Flatmates</SelectItem>
+              <SelectItem value="others">Others</SelectItem>
             </SelectContent>
           </Select>
         </div>

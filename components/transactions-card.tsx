@@ -39,7 +39,6 @@ export default function PastTransactionsCard({ transactions }: PastTransactionsP
               key={transaction.id}
               className="flex items-center justify-between p-4 rounded-lg bg-background hover:bg-gray-50 cursor-pointer transition-colors duration-200 ease-in-out"
               onClick={() => handleTransactionClick(transaction)}
-              // style={{backgroundColor: transaction.isScam? 'red': 'white'}}
             >
               <div>
                 <p className="text-sm font-medium leading-none">{transaction.name}</p>

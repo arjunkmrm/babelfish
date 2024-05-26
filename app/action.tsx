@@ -13,7 +13,10 @@ import InsurancePlansCard from "@/components/insurance-card";
 import InvestmentCard from "@/components/manage-investment";
 import LoansCard from "@/components/apply-loan-card";
 import CardsManagementCard from "@/components/card-managemnent-card";
+import fs from 'fs';
+import CallHotline from "@/components/hotline-card";
 import ChatComponent from "@/components/ChatComponent"
+import AddMoneyToSafevault from "@/components/safevault-card";
 
 const openai = new OpenAI();
 const chatHistory = [];
@@ -23,6 +26,8 @@ async function submitMessage(content: string) {
   
 
   const aiState = getMutableAIState<typeof AI>();
+  // Read the system prompt from system.txt
+  const systemPrompt = fs.readFileSync('./public/system.txt', 'utf-8');
 
   // Update AI state with new message.
   aiState.update([
@@ -47,7 +52,7 @@ async function submitMessage(content: string) {
     provider: openai,
     model: "gpt-4o",
     messages: [
-      { role: "system", content: "You are a helpful assistant" },
+      { role: "system", content: systemPrompt},
       ...chatHistory, 
     ],
     // `text` is called when an AI returns a text response (as opposed to a tool call)
@@ -145,20 +150,20 @@ async function submitMessage(content: string) {
         description: "Display interface to convert currency",
         parameters: z
           .object({
-            fromCurrency: z.string().describe("The starting currency"),
+            confirmation: z.string().describe("user confirmation"),
           })
           .required(),
         render: async function* (args) {
           yield <Spinner />;
 
-          const { amount, fromCurrency, toCurrency } = JSON.parse(args as unknown as string);
+          const { confirmation } = JSON.parse(args as unknown as string);
 
           aiState.done([
             ...aiState.get(),
             {
               role: "function",
               name: "convert_currency_result",
-              content: JSON.stringify({ fromCurrency }),
+              content: JSON.stringify({ confirmation }),
             },
           ]);
 
@@ -177,20 +182,20 @@ async function submitMessage(content: string) {
         description: "Display interface to register PayNow",
         parameters: z
           .object({
-            phoneNumber: z.string().describe("optional phone number to register with PayNow"),
+            confirmation : z.string().describe("user confirmation"),
           })
           .required(),
         render: async function* (args) {
           yield <Spinner />;
 
-          const { phoneNumber } = JSON.parse(args as unknown as string);
+          const { confirmation } = JSON.parse(args as unknown as string);
 
           aiState.done([
             ...aiState.get(),
             {
               role: "function",
               name: "register_paynow_result",
-              content: JSON.stringify({ phoneNumber }),
+              content: JSON.stringify({ confirmation }),
             },
           ]);
 
@@ -212,9 +217,8 @@ async function submitMessage(content: string) {
             dateRange: z
               .object({
                 start: z.date().describe("The start date of the transaction history"),
-                end: z.date().describe("The end date of the transaction history"),
               })
-              .describe("The date range for the transactions")
+              .describe("The day range for the transactions")
               .required(),
           })
           .required(),
@@ -282,7 +286,7 @@ async function submitMessage(content: string) {
           .object({
             type: z
               .enum(["all", "travel", "life", "health"])
-              .describe("The type of insurance plan to filter by"),
+              .describe("The type of insurance plan user is interested in"),
           })
           .required(),
         render: async function* (args) {
@@ -316,7 +320,7 @@ async function submitMessage(content: string) {
           .object({
             type: z
               .enum(["all", "bonds", "stocks", "mixed"])
-              .describe("The type of investment product"),
+              .describe("The type of investment products user is interested in"),
           })
           .required(),
         render: async function* (args) {
@@ -352,7 +356,7 @@ async function submitMessage(content: string) {
           .object({
             type: z
               .enum(["all", "personal", "business", "student"])
-              .describe("The type of loan product"),
+              .describe("The type of loan product user is interested in"),
           })
           .required(),
 
@@ -418,7 +422,65 @@ async function submitMessage(content: string) {
           );
         },
       },
-
+      // end
+      // call_hotline
+      call_hotline: {
+        description: "Display interface to call a hotline",
+        parameters: z
+          .object({
+            reason: z.string().optional().describe("Reason for calling the hotline"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+          const { name, phoneNumber, avatarUrl, reason } = JSON.parse(args as unknown as string);
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "call_hotline_result",
+              content: JSON.stringify({ reason }),
+            },
+          ]);
+          return (
+            <BotMessage>
+              <div>
+                <CallHotline
+                />
+              </div>
+            </BotMessage>
+          );
+        },
+      },
+// end
+// add_money_to_safevault
+add_money_to_safevault: {
+  description: "Display interface to add money to safevault",
+  parameters: z
+    .object({
+      confirmation: z.string().describe("user confirmation"),
+    })
+    .required(),
+  render: async function* (args) {
+    yield <Spinner />;
+    const { confirmation } = JSON.parse(args as unknown as string);
+    aiState.done([
+      ...aiState.get(),
+      {
+        role: "function",
+        name: "add_money_to_safevault_result",
+        content: JSON.stringify({ confirmation }),
+      },
+    ]);
+    return (
+      <BotMessage>
+        <div>
+          <AddMoneyToSafevault />
+        </div>
+      </BotMessage>
+    );
+  },
+},
 // end
 
     },
