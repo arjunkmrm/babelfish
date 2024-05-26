@@ -1,5 +1,8 @@
-import { createAI, getMutableAIState, render } from "ai/rsc";
+"use server"
+
+import { createAI, getAIState, useAIState, getMutableAIState, render } from "ai/rsc";
 import OpenAI from "openai";
+import { ReactNode } from 'react';
 import { z } from "zod";
 import { Spinner } from "@/components/spinner";
 import { BotMessage } from "@/components/message";
@@ -17,17 +20,38 @@ import fs from 'fs';
 import CallHotline from "@/components/hotline-card";
 import ChatComponent from "@/components/ChatComponent"
 import AddMoneyToSafevault from "@/components/safevault-card";
+import AccountBalanceCard from "@/components/account-balance-card";
 
 const openai = new OpenAI();
-const chatHistory = [];
 
-async function submitMessage(content: string) {
-  "use server";
-  
+interface ServerMessage {
+  role: 'user' | 'assistant' | 'function';
+  content: string;
+}
 
+interface ClientMessage {
+  id: number;
+  display: ReactNode;
+}
+
+export async function submitMessage(content: string): Promise<ClientMessage> {
+  'use server';
   const aiState = getMutableAIState<typeof AI>();
+
   // Read the system prompt from system.txt
   const systemPrompt = fs.readFileSync('./public/system.txt', 'utf-8');
+
+  // Get the existing history from aiState
+  const chatHistory = aiState.get();
+
+  // Update AI state with new message.
+  aiState.update([
+    ...chatHistory,
+    {
+      role: "user",
+      content: content,
+    },
+  ]);
 
   // Update AI state with new message.
   aiState.update([
@@ -43,36 +67,47 @@ async function submitMessage(content: string) {
   //   { role: "assistant", content: "oh great! Let's get you prepared" }
   // ];
 
-  chatHistory.push({
-    role:"user",
-    content: content,
-  })
-
   const ui = render({
     provider: openai,
-    model: "gpt-4o",
+    model: "gpt-4",
     messages: [
       { role: "system", content: systemPrompt},
-      ...chatHistory, 
+      ...chatHistory.map(message => {
+        if (message.role === "function") {
+          return {
+            role: message.role,
+            content: message.content,
+            name: message.name || "",
+          };
+        } else {
+          return {
+            role: message.role,
+            content: message.content,
+          };
+        }
+      }),
+      { role: "user", content: content}
     ],
     // `text` is called when an AI returns a text response (as opposed to a tool call)
     text: ({ content, done }) => {
       // text can be streamed from the LLM, but we only want to close the stream with .done() when its completed.
       // done() marks the state as available for the client to access
       if (done) {
-        const assistantMessage = {
-          role: "assistant",
-          content,
-        }
-
-        chatHistory.push(assistantMessage);
-        
+        // Remove ** patterns from the content
+        const cleanedContent = content.replace(/\*\*/g, '');
+      
         aiState.done([
           ...aiState.get(),
-          assistantMessage,
+          {
+            role: "assistant",
+            content: cleanedContent,
+          },
         ]);
+      
+        return <BotMessage>{cleanedContent}</BotMessage>;
       }
-      return <BotMessage>{content}</BotMessage>;
+      
+      return <BotMessage>{content.replace(/\*\*/g, '')}</BotMessage>;
     },
     tools: {
       // // get weather
@@ -452,36 +487,66 @@ async function submitMessage(content: string) {
           );
         },
       },
-// end
-// add_money_to_safevault
-add_money_to_safevault: {
-  description: "Display interface to add money to safevault",
-  parameters: z
-    .object({
-      confirmation: z.string().describe("user confirmation"),
-    })
-    .required(),
-  render: async function* (args) {
-    yield <Spinner />;
-    const { confirmation } = JSON.parse(args as unknown as string);
-    aiState.done([
-      ...aiState.get(),
-      {
-        role: "function",
-        name: "add_money_to_safevault_result",
-        content: JSON.stringify({ confirmation }),
+      // end
+      // add_money_to_safevault
+      add_money_to_safevault: {
+        description: "Display interface to add money to safevault",
+        parameters: z
+          .object({
+            confirmation: z.string().describe("user confirmation"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+          const { confirmation } = JSON.parse(args as unknown as string);
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "add_money_to_safevault_result",
+              content: JSON.stringify({ confirmation }),
+            },
+          ]);
+          return (
+            <BotMessage>
+              <div>
+                <AddMoneyToSafevault />
+              </div>
+            </BotMessage>
+          );
+        },
       },
-    ]);
-    return (
-      <BotMessage>
-        <div>
-          <AddMoneyToSafevault />
-        </div>
-      </BotMessage>
-    );
-  },
-},
-// end
+      // end
+      // display account balances
+
+      display_account_balances: {
+        description: "Displays account balances",
+        parameters: z
+          .object({
+            accountType: z
+              .string()
+              .describe("name of account user interested"),
+          })
+          .required(),
+        render: async function* (args) {
+          yield <Spinner />;
+          const { accountType } = JSON.parse(args as unknown as string);
+          const accountBalances = await getAccountBalances();
+          aiState.done([
+            ...aiState.get(),
+            {
+              role: "function",
+              name: "display_account_balances_result",
+              content: JSON.stringify(accountBalances),
+            },
+          ]);
+          return (
+            <BotMessage>
+              <AccountBalanceCard accounts={accountBalances} />
+            </BotMessage>
+          );
+        },
+      },
 
     },
   });
@@ -566,6 +631,49 @@ async function initiatePayPeople(date: Date, group: string): Promise<any> {
       name: "Emily Johnson",
       group: "flatmates",
       avatar: "https://via.placeholder.com/150",
+    },
+  ];
+}
+// Dummy function for getAccountBalances
+
+async function getAccountBalances(): Promise<any> {
+  // This is a mock function. Replace it with your actual account balance retrieval logic.
+  console.log('Retrieving account balances');
+
+  // Simulate a delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Return mock account balances
+  return [
+    {
+      id: 1,
+      name: 'Primary Checking',
+      avatar: 'https://via.placeholder.com/150',
+      balance: 5000,
+    },
+    {
+      id: 2,
+      name: 'Secondary Checking',
+      avatar: 'https://via.placeholder.com/150',
+      balance: 2500,
+    },
+    {
+      id: 3,
+      name: 'Emergency Savings',
+      avatar: 'https://via.placeholder.com/150',
+      balance: 10000,
+    },
+    {
+      id: 4,
+      name: 'Vacation Savings',
+      avatar: 'https://via.placeholder.com/150',
+      balance: 3000,
+    },
+    {
+      id: 5,
+      name: 'Investment Account',
+      avatar: 'https://via.placeholder.com/150',
+      balance: 25000,
     },
   ];
 }
