@@ -102,7 +102,7 @@ export default function Page() {
   const handleMicClick = () => {
     setIsDialogOpen(true);
   };
-
+  // test
   return (
     <div className="flex flex-col items-center min-h-screen p-4 relative">
       {messages.length === 0 && (
@@ -118,7 +118,7 @@ export default function Page() {
             color: 'rgba(74, 85, 104, 0.5)', // Lighter shade and reduced opacity
           }}
         >
-        Good Morning
+        Hello there!
           </div>
 
       )}
