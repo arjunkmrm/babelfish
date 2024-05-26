@@ -2,9 +2,9 @@
 
 This is a project [Valli](https://github.com/vallipichappan) and I built for angelhack's HackSingapore 2024. 
 - **Problem statement:** 
-    - Navigating banking applications is tough. 
-    - Many useful features end up not even being used. 
-    - *How can we make navigating banking applications so simple, that even your grandma would love to use it.*
+    - Navigating banking applications is tough, there are 20 - 30 tools in an application. 
+    - Many useful features end up not being used or not even known.
+    - *How can we make navigating banking applications so simple, that even your grandma would love to use it?*
 - **Solution:** 
     - Create generative user interfaces on the fly based on user interaction in any language. 
     - *Say goodbye to navigating through the UI, let the UI navigate to you.*
