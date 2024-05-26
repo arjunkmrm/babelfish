@@ -21,7 +21,7 @@ import CallHotline from "@/components/hotline-card";
 import ChatComponent from "@/components/ChatComponent"
 import AddMoneyToSafevault from "@/components/safevault-card";
 import AccountBalanceCard from "@/components/account-balance-card";
-import { systemPrompt } from '@/lib/systemprompt';
+import { systemPrompt } from '@/lib/systemPrompt'
 
 const openai = new OpenAI();
 
