@@ -580,29 +580,79 @@ async function getTransactions(dateRange: { start: Date; end: Date }): Promise<a
 
   // Return a mock transactions result
   return [
-    {
-      id: 1,
-      name: "Grocery Store",
-      date: "2023-05-01",
-      time: "10:30 AM",
-      amount: 45.0,
-    },
-    {
-      id: 2,
-      name: "Online Purchase",
-      date: "2023-05-15",
-      time: "02:45 PM",
-      amount: 89.99,
-    },
-    {
-      id: 3,
-      name: "Restaurant",
-      date: "2023-05-20",
-      time: "07:15 PM",
-      amount: 60.0,
-    },
-  ];
-}
+          {
+            "id": 1,
+            "name": "Grocery Store",
+            "date": "2024-05-23",
+            "time": "14:00",
+            "amount": 120.5
+          },
+          {
+            "id": 2,
+            "name": "Electricity Bill",
+            "date": "2024-05-20",
+            "time": "10:30",
+            "amount": 250
+          },
+          {
+            "id": 3,
+            "name": "Pharmacy",
+            "date": "2024-05-18",
+            "time": "16:45",
+            "amount": 75.3
+          },
+          {
+            "id": 4,
+            "name": "Monthly Rent",
+            "date": "2024-05-01",
+            "time": "09:00",
+            "amount": 900
+          },
+          {
+            "id": 5,
+            "name": "Phone Bill",
+            "date": "2024-05-15",
+            "time": "12:00",
+            "amount": 60
+          },
+          {
+            "id": 6,
+            "name": "Restaurant",
+            "date": "2024-05-10",
+            "time": "20:00",
+            "amount": 150.75
+          },
+          {
+            "id": 7,
+            "name": "Water Bill",
+            "date": "2024-05-08",
+            "time": "11:00",
+            "amount": 200
+          },
+          {
+            "id": 8,
+            "name": "Clothing Store",
+            "date": "2024-05-05",
+            "time": "13:00",
+            "amount": 80
+          },
+          {
+            "id": 9,
+            "name": "Online Subscription",
+            "date": "2024-05-03",
+            "time": "19:00",
+            "amount": 50
+          },
+          {
+            "id": 10,
+            "name": "Unknown Number",
+            "date": "2024-04-30",
+            "time": "21:00",
+            "amount": 3000,
+            "isScam": true
+          }
+        ]
+      };
 
 // Dummy function for getInsurancePlans
 async function getInsurancePlans(type: string): Promise<any> {
