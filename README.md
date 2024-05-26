@@ -37,8 +37,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Demo
 
-- [Generative UI Demo](https://www.youtube.com/watch?v=nIDV1vgg2tM)
+- [Generative UI Demo](https://www.youtube.com/watch?v=B_Wksd7MpRg)
 
-[![Generative UI Demo](https://img.youtube.com/vi/nIDV1vgg2tM/0.jpg)](https://www.youtube.com/watch?v=nIDV1vgg2tM)
+[![Generative UI Demo](https://img.youtube.com/vi/B_Wksd7MpRg/0.jpg)](https://www.youtube.com/watch?v=B_Wksd7MpRg)
 
 
