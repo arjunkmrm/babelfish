@@ -18,7 +18,7 @@ It's developed based on the sample code provided in the [official documentation]
 
 [![Generative UI Demo](https://img.youtube.com/vi/B_Wksd7MpRg/0.jpg)](https://www.youtube.com/watch?v=B_Wksd7MpRg)
 
-## Getting Started
+## Deploying locally
 
 1. Clone the repository
 
