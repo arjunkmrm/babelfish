@@ -281,7 +281,7 @@ async function submitMessage(content: string) {
       },
       // view insurance plans
       view_insurance_plans: {
-        description: "Returns a UI with list of insurance plans available",
+        description: "shows a UI with list of insurance plans available",
         parameters: z
           .object({
             type: z
@@ -386,7 +386,7 @@ async function submitMessage(content: string) {
       // end
       // manage cards
       manage_cards: {
-        description: "shows a UI for managing credit cards",
+        description: "shows a UI for managing cards, when user wants to manage their cards for overseas use for example",
         parameters: z
           .object({
             type: z

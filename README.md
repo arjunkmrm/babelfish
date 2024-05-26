@@ -35,8 +35,12 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Learn More
+**## Demo**
 
 More links:
 
-- [Generative UI Demo]
+- [Generative UI Demo](https://www.youtube.com/watch?v=nIDV1vgg2tM)
+
+[![Generative UI Demo](https://img.youtube.com/vi/nIDV1vgg2tM/0.jpg)](https://www.youtube.com/watch?v=nIDV1vgg2tM)
+
+

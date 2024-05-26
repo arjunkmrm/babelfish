@@ -3,8 +3,8 @@ import { AI } from "./action";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Generative UI Minimal Demo",
-  description: "A simplified demonstration of AI RSC capabilities.",
+  title: "babelfish",
+  description: "demo of babelfish",
 };
 
 export default function RootLayout({
