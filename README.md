@@ -9,9 +9,6 @@ This is a project [Valli](https://github.com/vallipichappan) and I built for ang
     - Create generative user interfaces on the fly based on user interaction in any language. 
     - *Say goodbye to navigating through the UI, let the UI navigate to you.*
 
-It utilizes [Vercel AI SDK v3.0](https://github.com/vercel/ai) to implement Generative UI.
-It's developed based on the sample code provided in the [official documentation](https://sdk.vercel.ai/docs/concepts/ai-rsc).
-
 ## Demo
 
 - [Generative UI Demo](https://www.youtube.com/watch?v=B_Wksd7MpRg)
