@@ -26,7 +26,7 @@ export default function CurrencyConverter() {
     fetchExchangeRate();
   }, [startingCurrency, convertingCurrency, amount]);
 
-  const handleAmountChange = (e) => {
+  const handleAmountChange = (e: { target: { value: string; }; }) => {
     const value = parseFloat(e.target.value);
     setAmount(value);
     setConvertedAmount(value * exchangeRate);
