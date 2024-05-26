@@ -21,6 +21,7 @@ import CallHotline from "@/components/hotline-card";
 import ChatComponent from "@/components/ChatComponent"
 import AddMoneyToSafevault from "@/components/safevault-card";
 import AccountBalanceCard from "@/components/account-balance-card";
+import { systemPrompt } from '@/lib/systemprompt';
 
 const openai = new OpenAI();
 
@@ -39,7 +40,7 @@ export async function submitMessage(content: string): Promise<ClientMessage> {
   const aiState = getMutableAIState<typeof AI>();
 
   // Read the system prompt from system.txt
-  const systemPrompt = fs.readFileSync('./public/system.txt', 'utf-8');
+  // const systemPrompt = fs.readFileSync('./public/system.txt', 'utf-8');
 
   // Get the existing history from aiState
   const chatHistory = aiState.get();
