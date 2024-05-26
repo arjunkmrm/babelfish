@@ -19,84 +19,88 @@ export default function Page() {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const addAudioElement = async (blob: Blob) => {
-    console.log("addAudioElement function called");
+  // const addAudioElement = async (blob: Blob) => {
+  //   console.log("addAudioElement function called");
 
-    try {
-      const formData = new FormData();
-      formData.append('audio', blob, 'audio.webm');
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('audio', blob, 'audio.webm');
 
-      const response = await fetch('http://localhost:3001/transcribe', {
-        method: 'POST',
-        body: formData,
-      });
+  //     const response = await fetch('http://localhost:3001/transcribe', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
 
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`Network response was not ok: ${response.statusText}`);
+  //     }
 
-      const data = await response.json();
-      console.log("Transcription:", data.transcription);
+  //     const data = await response.json();
+  //     console.log("Transcription:", data.transcription);
 
-      // Treat the transcription as user input and proceed
-      const userMessage = data.transcription;
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        {
-          id: Date.now(),
-          display: <UserMessage>{userMessage}</UserMessage>,
-        },
-      ]);
-      const responseMessage = await submitMessage(userMessage);
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        responseMessage,
-      ]);
+  //     // Treat the transcription as user input and proceed
+  //     const userMessage = data.transcription;
+  //     setMessages((currentMessages) => [
+  //       ...currentMessages,
+  //       {
+  //         id: Date.now(),
+  //         display: <UserMessage>{userMessage}</UserMessage>,
+  //       },
+  //     ]);
+  //     const responseMessage = await submitMessage(userMessage);
+  //     setMessages((currentMessages) => [
+  //       ...currentMessages,
+  //       responseMessage,
+  //     ]);
 
-    } catch (error) {
-      console.error("Error in addAudioElement:", error);
-      setIsDialogOpen(true); // Open dialog when there's an error
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error in addAudioElement:", error);
+  //     setIsDialogOpen(true); // Open dialog when there's an error
+  //   }
+  // };
 
-  const startRecording = async () => {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      console.error("Media devices are not supported in this browser.");
-      return;
-    }
+  // const startRecording = async () => {
+  //   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+  //     console.error("Media devices are not supported in this browser.");
+  //     return;
+  //   }
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setMediaStream(stream);
-      const recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000 });
-      setMediaRecorder(recorder);
-      recorder.start();
-      setIsRecording(true);
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  //     setMediaStream(stream);
+  //     const recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000 });
+  //     setMediaRecorder(recorder);
+  //     recorder.start();
+  //     setIsRecording(true);
 
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          addAudioElement(event.data);
-        }
-      };
+  //     recorder.ondataavailable = (event) => {
+  //       if (event.data.size > 0) {
+  //         addAudioElement(event.data);
+  //       }
+  //     };
 
-      recorder.onstop = () => {
-        setIsRecording(false);
-        setMediaRecorder(null);
-        if (mediaStream) {
-          mediaStream.getTracks().forEach(track => track.stop());
-          setMediaStream(null);
-        }
-      };
-    } catch (err) {
-      console.error("Error accessing media devices.", err);
-      setIsDialogOpen(true); // Open dialog when there's an error
-    }
-  };
+  //     recorder.onstop = () => {
+  //       setIsRecording(false);
+  //       setMediaRecorder(null);
+  //       if (mediaStream) {
+  //         mediaStream.getTracks().forEach(track => track.stop());
+  //         setMediaStream(null);
+  //       }
+  //     };
+  //   } catch (err) {
+  //     console.error("Error accessing media devices.", err);
+  //     setIsDialogOpen(true); // Open dialog when there's an error
+  //   }
+  // };
 
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-    }
+  // const stopRecording = () => {
+  //   if (mediaRecorder) {
+  //     mediaRecorder.stop();
+  //   }
+  // };
+
+  const handleMicClick = () => {
+    setIsDialogOpen(true);
   };
 
   return (
@@ -159,7 +163,8 @@ export default function Page() {
           />
           <Button
             type="button"
-            onClick={isRecording ? stopRecording : startRecording}
+            onClick={handleMicClick}
+            // onClick={isRecording ? stopRecording : startRecording}
             className={`ml-2 p-2 rounded-full ${isRecording ? 'bg-gray-700' : 'bg-transparent'} hover:bg-gray-500 focus:bg-dark`}
             style={{ outline: 'none' }}
           >
@@ -171,9 +176,9 @@ export default function Page() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Server Connection Error</DialogTitle>
+            <DialogTitle>Speech mode</DialogTitle>
             <DialogDescription>
-              There was an error connecting to the server. Please try again later.
+              Sorry speech not deployed to production yet. Maybe soon?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
