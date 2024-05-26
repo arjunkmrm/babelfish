@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Image from "next/image";
 
 const AddMoneyToSafevault = () => {
@@ -11,7 +11,7 @@ const AddMoneyToSafevault = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
-  const handleAmountChange = (e) => {
+  const handleAmountChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setAmount(e.target.value);
   };
 

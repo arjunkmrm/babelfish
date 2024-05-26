@@ -2,7 +2,7 @@
 
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,11 +18,11 @@ export default function RegisterPayNow() {
   const [showPopup, setShowPopup] = useState(false);
   const [showOtpInput, setShowOtpInput] = useState(false);
 
-  const handlePhoneNumberChange = (e) => {
+  const handlePhoneNumberChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setPhoneNumber(e.target.value);
   };
 
-  const handleOtpChange = (otpValue) => {
+  const handleOtpChange = (otpValue: SetStateAction<string>) => {
     setOtp(otpValue);
   };
 
