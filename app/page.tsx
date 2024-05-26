@@ -114,7 +114,7 @@ export default function Page() {
             color: 'rgba(74, 85, 104, 0.5)', // Lighter shade and reduced opacity
           }}
         >
-        Good Morning, Bidyut
+        Good Morning
           </div>
 
       )}
