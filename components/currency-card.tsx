@@ -7,7 +7,7 @@ import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { getExchangeRate } from "@/lib/utils/exchangeRateService"; // Import the dummy exchange rate function
 
-const currencies = ["USD", "EUR", "GBP", "JPY"]; // Example currency options
+const currencies = ["USD", "SGD", "EUR", "GBP", "JPY"]; // Example currency options
 
 export default function CurrencyConverter() {
   const [startingCurrency, setStartingCurrency] = useState("USD");
