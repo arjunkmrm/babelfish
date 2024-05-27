@@ -116,10 +116,17 @@ export default function Page() {
             fontSize: '2.5rem',
             fontFamily: 'Georgia, serif',
             color: 'rgba(74, 85, 104, 0.5)', // Lighter shade and reduced opacity
+            textAlign: 'center',
           }}
         >
-        Hello there!
-          </div>
+      <div style={{ fontSize: '4rem' }}>
+        Ask away!
+        <br />
+        <span style={{ fontSize: '1.5rem' }}>
+          Generative UI for your banking needs - proof of concept
+        </span>
+      </div>
+    </div>
 
       )}
       <div className="flex flex-col space-y-4 w-full max-w-2xl mb-16">
